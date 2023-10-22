@@ -18,13 +18,19 @@ function cacheMiddleware(req, res, next) {
     if (cachedData) {
         const etag = `"${JSON.stringify(cachedData)}"`;
         res.setHeader('ETag', etag);
-        if (req.headers['if-none-match'] === etag) {
+        if (req.headers['if-none-match'] == etag) {
             res.status(304).send();
             return;
         }
     }
     next();
 }
+
+
+// Rota para listar todos os itens
+app.get('/', (req, res) => {
+   return res.status(404).json({ erro: 'Deve ser informado um recurso: pessoas, carros ou animais.' });
+});
 
 // Rota para listar todos os itens
 app.get('/:recurso', cacheMiddleware, (req, res) => {
